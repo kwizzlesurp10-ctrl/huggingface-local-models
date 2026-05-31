@@ -47,6 +47,12 @@ python browser_connector.py select "MIT License" --container "Add license"
 python browser_connector.py select "Python" --in "Add .gitignore"
 ```
 
+## Examples
+
+See the `examples/` directory for runnable demonstrations:
+
+- `examples/select_dropdowns.py` — Using the powerful new `select` / `select_option` helper for menus and custom dropdowns.
+
 ## Browser Assistant Swarm Concept
 
 This repo directly implements and extends ideas from browser-assistant-swarm / OpenComet:
