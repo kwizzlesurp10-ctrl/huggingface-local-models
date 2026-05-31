@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
-Step-by-step GitHub repository creator for huggingface-local-models.
+Step-by-step GitHub repository creator (originally written for the temporary bootstrap name "huggingface-local-models").
 
 This version is designed to be more resilient. It pauses at key steps
 so you can confirm in the browser or handle any CAPTCHAs/logins manually.
+
+NOTE: "huggingface-local-models" was the original temporary name used while bootstrapping
+this repository. The project was later renamed to "automation-builder".
 
 Run it, and follow the prompts.
 """
@@ -17,7 +20,7 @@ import sys
 
 def main():
     print("=" * 70)
-    print("GitHub Repository Setup: huggingface-local-models")
+    print("GitHub Repository Setup (historical step-by-step script)")
     print("=" * 70)
     print("This will guide you through creating the repo using your live browser.")
     print("The glowing panda will be disabled to avoid GitHub CSP issues.")
@@ -43,11 +46,11 @@ def main():
         # Step 2 - Repo name
         print("\n[Step 2] Filling repository name...")
         try:
-            conn.page.locator("#repository-name-input").first.fill("huggingface-local-models")
-            print("  Name filled: huggingface-local-models")
+            conn.page.locator("#repository-name-input").first.fill("automation-builder")
+            print("  Name filled: automation-builder (script originally used the temp bootstrap name)")
         except Exception as e:
             print(f"  Selector issue: {e}")
-            print("  Please manually fill 'huggingface-local-models' in the name field.")
+            print("  Please manually fill the target repository name in the name field.")
             pause()
 
         conn.screenshot("/tmp/step2_name_filled.png")
@@ -87,7 +90,7 @@ def main():
         time.sleep(8)
 
         current_url = conn.get_url()
-        if "huggingface-local-models" in current_url and "/new" not in current_url:
+        if "automation-builder" in current_url and "/new" not in current_url:
             print(f"\n\u2705 SUCCESS! Repository created at: {current_url}")
             conn.screenshot("/tmp/step5_repo_created.png")
             print("Final screenshot saved.")
@@ -98,7 +101,7 @@ def main():
 
         print("\n" + "=" * 70)
         print("Basic repo creation flow complete.")
-        print("You can now manually add topics (huggingface, llm, local-llm, etc.)")
+        print("You can now manually add topics (huggingface, llm, local-llm, browser-automation, etc.)")
         print("or continue with further automation if needed.")
         print("=" * 70)
 
