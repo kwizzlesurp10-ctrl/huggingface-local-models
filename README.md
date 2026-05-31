@@ -21,6 +21,7 @@ Located in the root Python package + CLI:
 
 - `browser_connector.py` — `WebBrowserConnector` with CDP support for persistent real Chrome
 - Full tab management, `execute_script`, `wait_for_navigation`
+- **New: `select` command** — robust click-to-select for dropdowns, menus, and custom lists (the real pattern for GitHub forms, ARIA popovers, etc.)
 - Rich keyboard shortcuts + `list_keyboard_shortcuts()` self-discovery for agents
 - Visual glowing 🐼 panda indicator (active + searching animation) with configurable auto-trigger
 - `--cdp` / auto-detect + persistent profile support
@@ -29,19 +30,7 @@ Located in the root Python package + CLI:
 
 See the original development in the sibling `Grok-Playwright-Browser-Connector` work for the full evolution and debugging story.
 
-## Browser Assistant Swarm Concept
-
-This repo directly implements and extends ideas from browser-assistant-swarm / OpenComet:
-
-- Real (not headless) browser as first-class tool for agents
-- Local inference (Ollama + the HF local models in this repo) driving multi-step browser tasks
-- Observable actions (panda + screenshots + structured output)
-- Keyboard + DOM + script surface for reliable control
-- Potential future: LangGraph loops, extension sidepanel, dashboard, memory, and approval gates
-
-Future agents running on models from this repo can use the connector as their "eyes and hands" on the authenticated web.
-
-## Quick Start (Browser Control)
+### Quick Start (Browser Control)
 
 ```bash
 # 1. One-time Chrome debug session (persistent profile with your logins)
@@ -52,7 +41,24 @@ python browser_connector.py launch-browser
 python browser_connector.py --cdp status
 python browser_connector.py goto https://huggingface.co
 python browser_connector.py list-shortcuts --json
+
+# New: robust click-to-select for dropdowns/menus (used heavily for GitHub form automation)
+python browser_connector.py select "MIT License" --container "Add license"
+python browser_connector.py select "Python" --in "Add .gitignore"
 ```
+
+## Browser Assistant Swarm Concept
+
+This repo directly implements and extends ideas from browser-assistant-swarm / OpenComet:
+
+- Real (not headless) browser as first-class tool for agents
+- Local inference (Ollama + the HF local models in this repo) driving multi-step browser tasks
+- Observable actions (panda + screenshots + structured output)
+- Keyboard + DOM + script surface for reliable control
+- **Click-based selection** (`select` command) for complex form/menu interactions
+- Potential future: LangGraph loops, extension sidepanel, dashboard, memory, and approval gates
+
+Future agents running on models from this repo can use the connector as their "eyes and hands" on the authenticated web — including reliable selection in dynamic UIs.
 
 ## ForgeAI Governance
 
