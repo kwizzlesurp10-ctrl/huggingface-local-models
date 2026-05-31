@@ -1,57 +1,72 @@
 # Automation Builder
 
-**Powerful browser automation and agent control plane** — built for real-world, authenticated web tasks.
+**Use an LLM chat to execute web navigation commands and actions** through your real logged-in browser.
 
 > Powered by **CDP-connected Playwright** (your real logged-in Chrome), **visual observability** (glowing panda), **keyboard-level control**, and **swarm-style agent patterns** inspired by [browser-assistant-swarm](https://github.com/kwizzlesurp10-ctrl/browser-assistant-swarm).
 
-This is the source project for Automation Builder — a production-grade toolkit that gives AI agents reliable, observable, keyboard-and-mouse-level control over a real user's already-logged-in browser.
+**Core repo concept**: Chat naturally with an LLM. The model translates your intent into precise browser actions using the full power of Automation Builder.
 
-## Why Automation Builder?
+This is the flagship experience of the project.
 
-Most browser automation is either headless + fragile or too low-level for agents. This project delivers the missing middle:
+## The Vision
 
-- Real logged-in browser via Chrome DevTools Protocol (CDP)
-- Strong visual observability with the glowing panda (active + searching modes)
-- Human-like control via rich keyboard shortcuts + self-discovery
-- Robust selection for modern dropdowns/menus (`select` command)
-- Agent-friendly Python API + CLI with JSON output and auto-indicator
+Instead of writing brittle scripts or using fragile headless automation, you simply talk to your browser:
 
-Perfect for building sophisticated automation agents, research tools, workflow builders, or swarm-style multi-agent systems.
+- "Go to Hugging Face, search for the latest Llama 3.2 GGUF models, and open the top result"
+- "Log into Linear, create a new issue titled 'Fix the panda animation', and assign it to me"
+- "On GitHub, create a new public repo called 'my-automation-experiments' with Python .gitignore and MIT license"
 
-## Core Features
+The LLM uses the rich, observable, keyboard-friendly surface provided by the connector (including the powerful `select` command for dropdowns).
 
-- **CDP Real Browser** — Persistent profile with all your logins, extensions, and cookies
-- **Glowing Panda** — Configurable visual indicator (auto-triggers on navigation, clicks, selects, etc.)
-- **Powerful Selection** — `select_option()` + CLI `select` for reliable dropdown/menu interaction
-- **Full Keyboard Control** — Dozens of shortcuts + `list_keyboard_shortcuts()` for agents
-- **Tab Intelligence** — Smart reuse, management, and discovery
-- **Rich Scripting** — `execute_script`, `wait_for_navigation`, robust locators
-- **CLI + Library** — Works from terminal or as tools for LLMs/agents
-- **Examples** — See `examples/` for ready patterns
+## Flagship Feature: LLM Chat
+
+The main entrypoint is `llm_chat.py`:
+
+```bash
+python llm_chat.py
+```
+
+It connects to:
+- Your real Chrome (via CDP on port 9222)
+- A local LLM via Ollama (default: llama3.1 or similar)
+
+The agent has full access to the connector's capabilities and automatically shows the glowing panda while acting.
+
+See `llm_chat.py` for the current implementation (ReAct-style action parsing + strong system prompt).
+
+## Why This Approach Works
+
+- Real browser = real logins, real state, real extensions
+- Glowing panda = excellent observability for the LLM (and for you watching)
+- Keyboard + `select_option` + `list_keyboard_shortcuts()` = reliable, discoverable actions
+- JSON-friendly output + structured results = easy for LLMs to reason over
 
 ## Quick Start
 
 ```bash
-# One-time: launch persistent debug Chrome
+# 1. Start your persistent Chrome
 python browser_connector.py launch-browser
 
-# Then control it
-python browser_connector.py --cdp goto https://github.com
-python browser_connector.py --cdp select "MIT License" --container "Add license"
-python browser_connector.py --cdp list-shortcuts --json
+# 2. (Optional) Start Ollama with a good model
+ollama run llama3.1
+
+# 3. Launch the LLM chat
+python llm_chat.py
 ```
 
-See `python browser_connector.py --help` for the full command set.
+Then just talk to it. The model will drive the browser for you.
 
 ## Examples
 
-```python
-from browser_connector import WebBrowserConnector
-
+```bash
+# Python API
 conn = WebBrowserConnector(cdp_url="http://localhost:9222", auto_indicator=True)
 conn.goto("https://github.com/new")
 conn.select_option("Python", container="Add .gitignore")
 conn.select_option("MIT License", container="Add license")
+
+# CLI
+python browser_connector.py select "Public" --container "Choose visibility"
 ```
 
 See the `examples/` directory for more runnable demonstrations.
