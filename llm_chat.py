@@ -145,9 +145,27 @@ CRITICAL RULES:
         """Call LLM, with special handling for vision when needed."""
         if self.backend == "ollama":
             url = f"{self.base_url}/api/chat"
+
+            # Ollama llava crashes if multiple images are in the history
+            # or if an image is attached to an older message.
+            # We extract all images and attach ONLY the latest one to the LAST user message.
+            clean_messages = []
+            latest_image = None
+            for msg in messages:
+                clean_msg = {"role": msg["role"], "content": msg["content"]}
+                if "images" in msg and msg["images"]:
+                    latest_image = msg["images"][-1]
+                clean_messages.append(clean_msg)
+
+            if latest_image:
+                for i in range(len(clean_messages) - 1, -1, -1):
+                    if clean_messages[i]["role"] == "user":
+                        clean_messages[i]["images"] = [latest_image]
+                        break
+
             payload = {
                 "model": self.model,
-                "messages": messages,
+                "messages": clean_messages,
                 "stream": False,
                 "options": {"temperature": 0.1},
             }
@@ -288,8 +306,8 @@ CRITICAL RULES:
                 try:
                     result["image_base64"] = self._get_screenshot_base64()
                     result["observation"] += " [Auto-screenshot captured]"
-                except Exception:
-                    pass
+                except Exception as e:
+                    print(f"   [Warning] Auto-screenshot failed: {e}")
 
             return result
 
