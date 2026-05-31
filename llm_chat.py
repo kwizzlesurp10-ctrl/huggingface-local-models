@@ -120,12 +120,15 @@ Available tools (call them by outputting clean JSON, one object per line):
 {{
   "action": "screenshot"
 }}   {vision_note}
+{{
+  "action": "list_keyboard_shortcuts"
+}}
 
-You also have: fill, type, execute_script, wait_for_navigation, new_tab, switch_to_tab, reload, list_keyboard_shortcuts.
+You also have: fill, type, execute_script, wait_for_navigation, new_tab, switch_to_tab, reload.
 
 CRITICAL RULES:
-1. Call `list_keyboard_shortcuts` early when exploring a new site.
-2. Prefer `keyboard_shortcut` and `select_option` for reliability.
+1. SELF-DISCOVERY: When exploring a new site or UI (like Drive or GitHub), ALWAYS call `list_keyboard_shortcuts` first. Modern SPAs have rich keyboard shortcuts (e.g. 'c' to compose, '/' to search) that are significantly more reliable than clicking fragile CSS selectors.
+2. Prefer `keyboard_shortcut` and `select_option` over DOM clicks whenever possible.
 3. After actions you will receive observations. Use them to decide next steps.
 4. Output ONLY JSON action objects (one per line). No extra commentary unless answering the user directly.
 """
