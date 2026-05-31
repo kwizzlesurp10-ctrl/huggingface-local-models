@@ -74,8 +74,10 @@ Vision-capable models (gpt-4o, llava, etc.) automatically receive screenshots wh
 
 ## Repository Name
 
-The project is called **Automation Builder**.  
-The current GitHub slug is still `huggingface-local-models` (historical). The recommended name going forward is `automation-builder`. Please rename the repository on GitHub if possible (Settings \u2192 General \u2192 Rename repository).
+The project is called **Automation Builder** and lives at:
+https://github.com/kwizzlesurp10-ctrl/automation-builder
+
+(The original creation used the temporary name `huggingface-local-models` during bootstrapping.)
 
 ## Browser Assistant Swarm Connection
 
