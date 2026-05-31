@@ -93,9 +93,9 @@ class LLMBrowserAgent:
         return any(kw in model_lower for kw in vision_keywords)
 
     def _build_system_prompt(self) -> str:
-        vision_note = ""
+        vision_rule = ""
         if self.is_vision_model:
-            vision_note = "\nYou have vision capabilities. When you call the `screenshot` action, the actual image will be provided to you in subsequent messages."
+            vision_rule = "\n5. VISION CAPABILITY: You receive actual images when you call `screenshot`. CRITICAL: Cross-reference the output of `list_keyboard_shortcuts` with your visual understanding of the UI to map visual buttons/icons directly to robust keyboard commands."
 
         return f"""You are an expert browser automation agent controlling a real logged-in Chrome browser using the Automation Builder toolkit.
 
@@ -119,7 +119,7 @@ Available tools (call them by outputting clean JSON, one object per line):
 }}
 {{
   "action": "screenshot"
-}}   {vision_note}
+}}
 {{
   "action": "list_keyboard_shortcuts"
 }}
@@ -130,7 +130,7 @@ CRITICAL RULES:
 1. SELF-DISCOVERY: When exploring a new site or UI (like Drive or GitHub), ALWAYS call `list_keyboard_shortcuts` first. Modern SPAs have rich keyboard shortcuts (e.g. 'c' to compose, '/' to search) that are significantly more reliable than clicking fragile CSS selectors.
 2. Prefer `keyboard_shortcut` and `select_option` over DOM clicks whenever possible.
 3. After actions you will receive observations. Use them to decide next steps.
-4. Output ONLY JSON action objects (one per line). No extra commentary unless answering the user directly.
+4. Output ONLY JSON action objects (one per line). No extra commentary unless answering the user directly.{vision_rule}
 """
 
     def _get_screenshot_base64(self) -> str:
